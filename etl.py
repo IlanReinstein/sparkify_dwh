@@ -4,12 +4,30 @@ from sql_queries import copy_table_queries, insert_table_queries
 
 
 def load_staging_tables(cur, conn):
+    """
+    Load staging tables from JSON into Redshift.
+    -------------------
+    Param:
+        cur: SQL cursor to execute queries
+        conn: Connection instance to commit changes
+    Return:
+        None
+    """
     for query in copy_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def insert_tables(cur, conn):
+    """
+    Insert data from stage into DW.
+    -------------------
+    Param:
+        cur: SQL cursor to execute queries
+        conn: Connection instance to commit changes
+    Return:
+        None
+    """
     for query in insert_table_queries:
         cur.execute(query)
         conn.commit()

@@ -13,13 +13,13 @@ IAM_ROLE = config['IAM_ROLE']['ARN']
 
 # DROP TABLES
 
-staging_events_table_drop = "DROP TABLE IF EXISTS stage_events"
-staging_songs_table_drop = "DROP TABLE IF EXISTS stage_songs"
-songplay_table_drop = "DROP TABLE IF EXISTS songplays"
-user_table_drop = "DROP TABLE IF EXISTS users"
-song_table_drop = "DROP TABLE IF EXISTS songs"
-artist_table_drop = "DROP TABLE IF EXISTS artists"
-time_table_drop = "DROP TABLE IF EXISTS time"
+staging_events_table_drop = "DROP TABLE IF EXISTS stage_events;"
+staging_songs_table_drop = "DROP TABLE IF EXISTS stage_songs;"
+songplay_table_drop = "DROP TABLE IF EXISTS songplays;"
+user_table_drop = "DROP TABLE IF EXISTS users;"
+song_table_drop = "DROP TABLE IF EXISTS songs;"
+artist_table_drop = "DROP TABLE IF EXISTS artists;"
+time_table_drop = "DROP TABLE IF EXISTS time;"
 
 # CREATE TABLES
 
@@ -45,7 +45,7 @@ staging_events_table_create = ("""CREATE TABLE IF NOT EXISTS stage_events (
 """)
 
 staging_songs_table_create = ("""CREATE TABLE IF NOT EXISTS stage_songs (
-	artist_id VARCHAR NOT NULL,
+	artist_id VARCHAR,
 	artist_latitude NUMERIC,
 	artist_longitude NUMERIC,
 	artist_location VARCHAR,
@@ -118,7 +118,7 @@ staging_songs_copy = ("""COPY stage_songs FROM {}
 
 songplay_table_insert = ("""INSERT INTO songplays
 	(start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
-	SELECT TIMESTAMP 'epoch' + events.ts/1000 * interval '1 second' AS start_time,
+	SELECT DISTINCT TIMESTAMP 'epoch' + events.ts/1000 * interval '1 second' AS start_time,
 	userid, level, songs.song_id, songs.artist_id, sessionid, location, useragent
 	FROM stage_events events
 	JOIN stage_songs songs
